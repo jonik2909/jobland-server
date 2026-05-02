@@ -59,6 +59,7 @@ public class Member {
 
     private String memberTeamSize;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(20)")
     @Enumerated(EnumType.STRING)
     private Country memberCountry;
 
