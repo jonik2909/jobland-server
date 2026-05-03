@@ -2,6 +2,7 @@ package com.backend.jobland.exception;
 
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,7 +20,7 @@ public class GlobalExceiptionHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
 
-        int statusCode = 400;
+        int statusCode = HttpStatus.BAD_REQUEST.value();
 
         if (ex instanceof ErrorResponse errorResponse) {
             statusCode = errorResponse.getStatusCode().value();
