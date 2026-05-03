@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.service.MemberService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -22,7 +24,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Object body) {
+    public String login(@Valid @RequestBody MemberDto.Login body) {
         System.out.println("POST, login");
         System.out.println(body);
         return memberService.login(body);

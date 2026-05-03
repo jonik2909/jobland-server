@@ -10,9 +10,7 @@ public class MemberService {
     }
 
     public String login(Object body) {
-        System.out.println("memberService login");
-        System.out.println("memberRepository");
-        return "login successfully";
+        return "login api";
     }
 
 }
