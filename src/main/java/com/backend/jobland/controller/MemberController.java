@@ -25,8 +25,6 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@Valid @RequestBody MemberDto.Login body) {
-        System.out.println("POST, login");
-        System.out.println(body);
         return memberService.login(body);
     }
 
