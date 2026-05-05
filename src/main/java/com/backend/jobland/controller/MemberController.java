@@ -18,8 +18,8 @@ public class MemberController {
     private final MemberService memberService; // DI
 
     @PostMapping("/signup")
-    public String signup() {
-        System.out.println("POST, signup");
+    public String signup(@Valid @RequestBody MemberDto.Signup body) {
+        System.out.println(body);
         return memberService.signup();
     }
 
