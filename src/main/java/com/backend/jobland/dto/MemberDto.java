@@ -38,6 +38,7 @@ public class MemberDto {
         private String memberNick;
 
         @NotBlank()
+        @Size(min = 2, max = 15)
         private String memberPassword;
     }
 }

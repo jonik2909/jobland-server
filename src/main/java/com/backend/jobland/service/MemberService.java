@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
 import com.backend.jobland.lib.AppErrors;
+import com.backend.jobland.lib.enums.MemberStatus;
 import com.backend.jobland.lib.enums.MemberType;
 import com.backend.jobland.repository.MemberRepository;
 
@@ -39,8 +40,23 @@ public class MemberService {
         }
     }
 
-    public String login(Object body) {
-        return "login api";
+    public Member login(MemberDto.Login data) {
+        String nick = data.getMemberNick().toLowerCase();
+
+        Member member = memberRepository.findByMemberNick(nick)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.LOGIN_FAILED));
+
+        boolean isMatch = passwordEncoder.matches(data.getMemberPassword(), member.getMemberPassword());
+
+        if (!isMatch) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, AppErrors.LOGIN_FAILED);
+        }
+
+        if (member.getMemberStatus() != MemberStatus.ACTIVE) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, AppErrors.USER_BLOCKED);
+        }
+
+        return member;
     }
 
 }

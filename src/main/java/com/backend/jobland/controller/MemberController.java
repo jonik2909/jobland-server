@@ -34,8 +34,14 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody MemberDto.Login body) {
-        return memberService.login(body);
+    public ResponseEntity<Object> login(@Valid @RequestBody MemberDto.Login body) {
+        Member member = memberService.login(body);
+
+        // TODO: TOKEN AUTHENTICATION
+
+        Map<String, Object> result = Map.of("member", member);
+
+        return ResponseEntity.ok().body(result);
     }
 
 }
