@@ -26,6 +26,8 @@ public class MemberController {
     public ResponseEntity<Object> signup(@Valid @RequestBody MemberDto.Signup body) {
         Member member = memberService.signup(body);
 
+        // TODO: TOKEN AUTHENTICATION
+
         Map<String, Object> result = Map.of("member", member);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);

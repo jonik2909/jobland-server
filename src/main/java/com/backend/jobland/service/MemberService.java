@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
 import com.backend.jobland.lib.AppErrors;
+import com.backend.jobland.lib.enums.MemberType;
 import com.backend.jobland.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public Member signup(MemberDto.Signup data) {
+        if (data.getMemberType() == MemberType.ADMIN) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, AppErrors.ADMIN_SIGNUP_NOT_ALLOWED);
+        }
+
         try {
 
             Member member = new Member();
