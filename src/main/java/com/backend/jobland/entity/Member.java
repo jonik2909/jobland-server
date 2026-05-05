@@ -59,7 +59,7 @@ public class Member {
 
     private String memberTeamSize;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(20)")
+    @Column(columnDefinition = "VARCHAR(20)")
     @Enumerated(EnumType.STRING)
     private Country memberCountry;
 
@@ -76,11 +76,11 @@ public class Member {
 
     private Double memberHourRate;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(36)")
+    @Column(columnDefinition = "VARCHAR(36)")
     @Enumerated(EnumType.STRING)
     private Category memberCategory;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'NO'")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'NO'")
     @Enumerated(EnumType.STRING)
     private MemberFeatured memberFeatured;
 
