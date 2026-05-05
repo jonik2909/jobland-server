@@ -10,6 +10,7 @@ import com.backend.jobland.lib.enums.Country;
 import com.backend.jobland.lib.enums.MemberFeatured;
 import com.backend.jobland.lib.enums.MemberStatus;
 import com.backend.jobland.lib.enums.MemberType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Member {
     private String memberNick;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String memberPassword;
 
     @Column(nullable = false, unique = true)
