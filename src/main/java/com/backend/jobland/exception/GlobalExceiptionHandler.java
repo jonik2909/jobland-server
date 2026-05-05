@@ -8,6 +8,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.backend.jobland.dto.ApiResponse;
 import com.backend.jobland.lib.AppErrors;
@@ -28,6 +29,14 @@ public class GlobalExceiptionHandler {
         }
 
         return ResponseEntity.status(statusCode).body(ApiResponse.error(statusCode, errorMessage));
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException e) {
+        int errCode = e.getStatusCode().value();
+        String errMessage = e.getReason() != null ? e.getReason() : e.getMessage();
+        return ResponseEntity.status(errCode)
+                .body(ApiResponse.error(errCode, errMessage));
     }
 
     @ExceptionHandler(Exception.class)
