@@ -1,6 +1,7 @@
 package com.backend.jobland.service;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,12 +16,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Member signup(MemberDto.Signup data) {
         try {
+
             Member member = new Member();
             member.setMemberNick(data.getMemberNick().toLowerCase());
-            member.setMemberPassword(data.getMemberPassword());
+            member.setMemberPassword(passwordEncoder.encode(data.getMemberPassword()));
             member.setMemberPhone(data.getMemberPhone());
             member.setMemberType(data.getMemberType());
 
