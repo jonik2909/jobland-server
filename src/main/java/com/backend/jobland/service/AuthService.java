@@ -43,4 +43,12 @@ public class AuthService {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public Map<String, Object> parseToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }

@@ -4,6 +4,9 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +47,14 @@ public class MemberController {
         Map<String, Object> result = Map.of("member", member, "token", token);
 
         return ResponseEntity.ok().body(result);
+    }
+
+    @PreAuthorize("isAuthenticated()") // AUTHENTICATION
+    // @PreAuthorize("hasRole('COMPANY')") // AUTHORIZATION
+    @GetMapping("/checkMe")
+    public Object checkMe() {
+
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
 }
