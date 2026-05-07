@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
+import com.backend.jobland.security.SecurityUtils;
 import com.backend.jobland.service.AuthService;
 import com.backend.jobland.service.MemberService;
 
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
     private final MemberService memberService; // DI
     private final AuthService authService;
+    private final SecurityUtils securityUtils;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@Valid @RequestBody MemberDto.Signup body) {
@@ -49,12 +51,12 @@ public class MemberController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PreAuthorize("isAuthenticated()") // AUTHENTICATION
-    // @PreAuthorize("hasRole('COMPANY')") // AUTHORIZATION
+    // @PreAuthorize("isAuthenticated()") // AUTHENTICATION
+    @PreAuthorize("hasRole('COMPANY')") // AUTHORIZATION
     @GetMapping("/checkMe")
     public Object checkMe() {
-
-        return SecurityContextHolder.getContext().getAuthentication();
+        String nick = securityUtils.getCurrentUser().getMemberNick();
+        return nick;
     }
 
 }

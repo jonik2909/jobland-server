@@ -4,6 +4,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,6 +48,21 @@ public class GlobalExceiptionHandler {
         int errCode = HttpStatus.BAD_REQUEST.value();
         String errMessage = ex.getMessage() != null ? ex.getMessage() : AppErrors.SOMETHING_WENT_WRONG;
         return ResponseEntity.status(errCode).body(ApiResponse.error(errCode, errMessage));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || auth instanceof AnonymousAuthenticationToken) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
+                    .body(ApiResponse.error(HttpStatus.UNAUTHORIZED.value(),
+                            AppErrors.UNAUTHENTICATED));
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN.value())
+                .body(ApiResponse.error(HttpStatus.FORBIDDEN.value(),
+                        AppErrors.ACCESS_DENIED));
     }
 
 }
