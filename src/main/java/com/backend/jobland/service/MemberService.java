@@ -11,6 +11,7 @@ import com.backend.jobland.lib.AppErrors;
 import com.backend.jobland.lib.enums.MemberStatus;
 import com.backend.jobland.lib.enums.MemberType;
 import com.backend.jobland.repository.MemberRepository;
+import com.backend.jobland.security.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityUtils securityUtils;
 
     public Member signup(MemberDto.Signup data) {
         if (data.getMemberType() == MemberType.ADMIN) {
@@ -51,6 +53,19 @@ public class MemberService {
         if (!isMatch) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, AppErrors.LOGIN_FAILED);
         }
+
+        if (member.getMemberStatus() != MemberStatus.ACTIVE) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, AppErrors.USER_BLOCKED);
+        }
+
+        return member;
+    }
+
+    public Member checkMe() {
+        String memberId = securityUtils.getCurrentUser().getId();
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
 
         if (member.getMemberStatus() != MemberStatus.ACTIVE) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, AppErrors.USER_BLOCKED);

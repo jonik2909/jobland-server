@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
-import com.backend.jobland.security.SecurityUtils;
 import com.backend.jobland.service.AuthService;
 import com.backend.jobland.service.MemberService;
 
@@ -27,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
     private final MemberService memberService; // DI
     private final AuthService authService;
-    private final SecurityUtils securityUtils;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@Valid @RequestBody MemberDto.Signup body) {
@@ -51,12 +48,11 @@ public class MemberController {
         return ResponseEntity.ok().body(result);
     }
 
-    // @PreAuthorize("isAuthenticated()") // AUTHENTICATION
-    @PreAuthorize("hasRole('COMPANY')") // AUTHORIZATION
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/checkMe")
     public Object checkMe() {
-        String nick = securityUtils.getCurrentUser().getMemberNick();
-        return nick;
+        Member result = memberService.checkMe();
+        return ResponseEntity.ok().body(result);
     }
 
 }
