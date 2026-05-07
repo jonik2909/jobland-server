@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
+import com.backend.jobland.service.AuthService;
 import com.backend.jobland.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -21,14 +22,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService; // DI
+    private final AuthService authService;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@Valid @RequestBody MemberDto.Signup body) {
         Member member = memberService.signup(body);
 
-        // TODO: TOKEN AUTHENTICATION
+        String token = authService.createToken(member);
 
-        Map<String, Object> result = Map.of("member", member);
+        Map<String, Object> result = Map.of("member", member, "token", token);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -37,9 +39,9 @@ public class MemberController {
     public ResponseEntity<Object> login(@Valid @RequestBody MemberDto.Login body) {
         Member member = memberService.login(body);
 
-        // TODO: TOKEN AUTHENTICATION
+        String token = authService.createToken(member);
 
-        Map<String, Object> result = Map.of("member", member);
+        Map<String, Object> result = Map.of("member", member, "token", token);
 
         return ResponseEntity.ok().body(result);
     }
