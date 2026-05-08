@@ -74,4 +74,15 @@ public class MemberService {
         return member;
     }
 
+    public Member getMember(String targetId) {
+        Member targetMember = memberRepository.findById(targetId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        if (targetMember.getMemberStatus() != MemberStatus.ACTIVE) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND);
+        }
+
+        return targetMember;
+    }
+
 }

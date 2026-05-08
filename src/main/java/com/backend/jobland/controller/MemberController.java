@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +53,12 @@ public class MemberController {
     @GetMapping("/checkMe")
     public Object checkMe() {
         Member result = memberService.checkMe();
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getMember(@PathVariable String id) {
+        Member result = memberService.getMember(id);
         return ResponseEntity.ok().body(result);
     }
 
