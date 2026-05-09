@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.backend.jobland.dto.AdminDto;
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
 import com.backend.jobland.lib.AppErrors;
@@ -154,7 +155,33 @@ public class MemberService {
         AppUtils.copyNonNulls(data, member);
 
         return memberRepository.save(member);
-
     }
 
+    /** ADMIN **/
+    public Map<String, Object> getMembersByAdmin(AdminDto.AdminMembersInquiry query) {
+        int page = query.getPage();
+        int limit = query.getLimit();
+
+        MemberSort sortParam = query.getSort() != null ? query.getSort() : MemberSort.createdAt;
+
+        Sort sort = MemberSort.memberViews.equals(sortParam) ? Sort.by(Sort.Direction.DESC, "memberViews")
+                : Sort.by(Sort.Direction.DESC, "createdAt");
+
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+
+        Page<Member> memberList = memberRepository.findMembersByFilters(
+                query.getMemberType(),
+                query.getMemberCategory(),
+                query.getSearch(),
+                query.getMemberFeatured(),
+                query.getMemberStatus(),
+                true,
+                pageRequest);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", memberList.getContent());
+        response.put("total", memberList.getTotalElements());
+
+        return response;
+    }
 }
