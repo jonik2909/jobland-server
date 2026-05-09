@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
 import com.backend.jobland.lib.AppErrors;
+import com.backend.jobland.lib.AppUtils;
 import com.backend.jobland.lib.enums.MemberSort;
 import com.backend.jobland.lib.enums.MemberStatus;
 import com.backend.jobland.lib.enums.MemberType;
@@ -135,6 +136,25 @@ public class MemberService {
         response.put("total", memberList.getTotalElements());
 
         return response;
+    }
+
+    public Member updateMember(MemberDto.UpdateMember data) {
+        String memberId = securityUtils.getCurrentUser().getId();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        if (member.getMemberStatus() != MemberStatus.ACTIVE) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, AppErrors.USER_BLOCKED);
+        }
+
+        if (data.getMemberAge() != null) {
+            member.setMemberAge(data.getMemberAge());
+        }
+
+        AppUtils.copyNonNulls(data, member);
+
+        return memberRepository.save(member);
+
     }
 
 }

@@ -2,10 +2,12 @@ package com.backend.jobland.dto;
 
 import com.backend.jobland.lib.AppErrors;
 import com.backend.jobland.lib.enums.CategoryType;
+import com.backend.jobland.lib.enums.Country;
 import com.backend.jobland.lib.enums.MemberFeatured;
 import com.backend.jobland.lib.enums.MemberSort;
 import com.backend.jobland.lib.enums.MemberType;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +46,43 @@ public class MemberDto {
         @NotBlank()
         @Size(min = 2, max = 15)
         private String memberPassword;
+    }
+
+    @Data
+    public static class UpdateMember {
+        @Size(min = 2, max = 15)
+        private String memberNick;
+
+        @Size(min = 9, max = 15)
+        @Pattern(regexp = "^[+]?[0-9]+$", message = AppErrors.INVALID_PHONE_NUMBER)
+        private String memberPhone;
+
+        private Integer memberAge;
+
+        @Email()
+        private String memberEmail;
+
+        private String memberImage;
+
+        private String memberWebsite;
+
+        private String memberTeamSize;
+
+        private Country memberCountry;
+
+        private String memberCity;
+
+        private String memberDesc;
+
+        private String memberSalary;
+
+        private String memberExperience;
+
+        private String memberLanguage;
+
+        private Double memberHourRate;
+
+        private CategoryType memberCategory;
     }
 
     @Data
