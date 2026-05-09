@@ -1,8 +1,12 @@
 package com.backend.jobland.dto;
 
 import com.backend.jobland.lib.AppErrors;
+import com.backend.jobland.lib.enums.CategoryType;
+import com.backend.jobland.lib.enums.MemberFeatured;
+import com.backend.jobland.lib.enums.MemberSort;
 import com.backend.jobland.lib.enums.MemberType;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -40,5 +44,26 @@ public class MemberDto {
         @NotBlank()
         @Size(min = 2, max = 15)
         private String memberPassword;
+    }
+
+    @Data
+    public static class MembersInquiry {
+        @NotNull()
+        @Min(1)
+        private Integer page;
+
+        @NotNull()
+        @Min(1)
+        private Integer limit;
+
+        private MemberSort sort;
+
+        private MemberType memberType;
+
+        private CategoryType memberCategory;
+
+        private MemberFeatured memberFeatured;
+
+        private String search;
     }
 }

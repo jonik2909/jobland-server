@@ -1,11 +1,11 @@
 package com.backend.jobland.entity;
 
 import java.time.LocalDateTime;
-import java.util.Locale.Category;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.backend.jobland.lib.enums.CategoryType;
 import com.backend.jobland.lib.enums.Country;
 import com.backend.jobland.lib.enums.MemberFeatured;
 import com.backend.jobland.lib.enums.MemberStatus;
@@ -80,7 +80,7 @@ public class Member {
 
     @Column(columnDefinition = "VARCHAR(36)")
     @Enumerated(EnumType.STRING)
-    private Category memberCategory;
+    private CategoryType memberCategory;
 
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'NO'")
     @Enumerated(EnumType.STRING)

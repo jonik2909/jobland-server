@@ -1,5 +1,11 @@
 package com.backend.jobland.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.backend.jobland.dto.MemberDto;
 import com.backend.jobland.entity.Member;
 import com.backend.jobland.lib.AppErrors;
+import com.backend.jobland.lib.enums.MemberSort;
 import com.backend.jobland.lib.enums.MemberStatus;
 import com.backend.jobland.lib.enums.MemberType;
 import com.backend.jobland.lib.enums.ViewGroup;
@@ -101,6 +108,33 @@ public class MemberService {
     @Transactional
     public void updateMemberViews(String memberId) {
         memberRepository.incrementMemberViews(memberId);
+    }
+
+    public Map<String, Object> getMembers(MemberDto.MembersInquiry query) {
+        int page = query.getPage();
+        int limit = query.getLimit();
+
+        MemberSort sortParam = query.getSort() != null ? query.getSort() : MemberSort.createdAt;
+
+        Sort sort = MemberSort.memberViews.equals(sortParam) ? Sort.by(Sort.Direction.DESC, "memberViews")
+                : Sort.by(Sort.Direction.DESC, "createdAt");
+
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+
+        Page<Member> memberList = memberRepository.findMembersByFilters(
+                query.getMemberType(),
+                query.getMemberCategory(),
+                query.getSearch(),
+                query.getMemberFeatured(),
+                null,
+                false,
+                pageRequest);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", memberList.getContent());
+        response.put("total", memberList.getTotalElements());
+
+        return response;
     }
 
 }
