@@ -74,5 +74,4 @@ public class MemberController {
         Member result = memberService.updateMember(body);
         return ResponseEntity.ok(result);
     }
-
 }
