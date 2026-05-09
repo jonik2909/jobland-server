@@ -34,4 +34,11 @@ public class AdminDto {
         private String search;
     }
 
+    @Data
+    public static class AdminMemberUpdate {
+        private MemberStatus memberStatus;
+        private MemberType memberType;
+        private MemberFeatured memberFeatured;
+    }
+
 }

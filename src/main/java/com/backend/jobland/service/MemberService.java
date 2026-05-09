@@ -148,10 +148,6 @@ public class MemberService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, AppErrors.USER_BLOCKED);
         }
 
-        if (data.getMemberAge() != null) {
-            member.setMemberAge(data.getMemberAge());
-        }
-
         AppUtils.copyNonNulls(data, member);
 
         return memberRepository.save(member);
@@ -183,5 +179,15 @@ public class MemberService {
         response.put("total", memberList.getTotalElements());
 
         return response;
+    }
+
+    public Member updateMemberByAdmin(String memberId, AdminDto.AdminMemberUpdate data) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        AppUtils.copyNonNulls(data, member);
+
+        return memberRepository.save(member);
+
     }
 }
