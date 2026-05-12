@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.jobland.dto.AdminDto;
 import com.backend.jobland.entity.Member;
+import com.backend.jobland.service.JobService;
 import com.backend.jobland.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 
     private final MemberService memberService;
+    private final JobService jobService;
 
     @GetMapping("/member/list")
     public ResponseEntity<Object> getMembersByAdmin(@Valid AdminDto.AdminMembersInquiry query) {
@@ -36,6 +38,12 @@ public class AdminController {
     public ResponseEntity<Member> updateMemberByAdmin(@PathVariable("id") String id,
             @Valid @RequestBody AdminDto.AdminMemberUpdate body) {
         Member result = memberService.updateMemberByAdmin(id, body);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/job/list")
+    public ResponseEntity<Object> getJobsByAdmin(@Valid AdminDto.AdminJobsInquiry query) {
+        Map<String, Object> result = jobService.getJobsByAdmin(query);
         return ResponseEntity.ok(result);
     }
 }

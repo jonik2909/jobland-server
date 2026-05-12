@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.backend.jobland.dto.AdminDto;
 import com.backend.jobland.dto.CompanyDto;
 import com.backend.jobland.dto.JobDto;
 import com.backend.jobland.entity.Job;
@@ -175,4 +176,36 @@ public class JobService {
 
         return job;
     }
+
+    /** ADMIN **/
+    public Map<String, Object> getJobsByAdmin(AdminDto.AdminJobsInquiry query) {
+        int page = query.getPage();
+        int limit = query.getLimit();
+
+        JobSort sortParam = query.getSort() != null ? query.getSort() : JobSort.createdAt;
+
+        Sort sort = JobSort.jobViews.equals(sortParam) ? Sort.by(Sort.Direction.DESC, "jobViews")
+                : Sort.by(Sort.Direction.DESC, "createdAt");
+
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+
+        Page<Job> jobList = jobRepository.findJobsByFilters(
+                "ADMIN",
+                null,
+                query.getCompanyId(),
+                query.getJobType(),
+                query.getJobStatus(),
+                query.getJobLevel(),
+                query.getJobCountry(),
+                query.getJobCategory(),
+                query.getSearch(),
+                pageRequest);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", jobList.getContent());
+        response.put("total", jobList.getTotalElements());
+
+        return response;
+    }
+
 }

@@ -1,6 +1,11 @@
 package com.backend.jobland.dto;
 
 import com.backend.jobland.lib.enums.CategoryType;
+import com.backend.jobland.lib.enums.Country;
+import com.backend.jobland.lib.enums.JobLevel;
+import com.backend.jobland.lib.enums.JobSort;
+import com.backend.jobland.lib.enums.JobStatus;
+import com.backend.jobland.lib.enums.JobType;
 import com.backend.jobland.lib.enums.MemberFeatured;
 import com.backend.jobland.lib.enums.MemberSort;
 import com.backend.jobland.lib.enums.MemberStatus;
@@ -39,6 +44,35 @@ public class AdminDto {
         private MemberStatus memberStatus;
         private MemberType memberType;
         private MemberFeatured memberFeatured;
+    }
+
+    @Data
+    public static class AdminJobsInquiry {
+
+        @NotNull()
+        @Min(1)
+        private Integer page;
+
+        @NotNull()
+        @Min(1)
+        private Integer limit;
+
+        private JobSort sort;
+
+        private String companyId;
+
+        private JobType jobType;
+
+        private JobLevel jobLevel;
+
+        private Country jobCountry;
+
+        private CategoryType jobCategory;
+
+        private JobStatus jobStatus;
+
+        private String search;
+
     }
 
 }
