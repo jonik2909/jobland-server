@@ -133,4 +133,36 @@ public class JobService {
         }
         return jobRepository.save(job);
     }
+
+    public Map<String, Object> getMyJobs(CompanyDto.CompanyJobsInquiry query) {
+        int page = query.getPage();
+        int limit = query.getLimit();
+
+        JobSort sortParam = query.getSort() != null ? query.getSort() : JobSort.createdAt;
+
+        Sort sort = JobSort.jobViews.equals(sortParam) ? Sort.by(Sort.Direction.DESC, "jobViews")
+                : Sort.by(Sort.Direction.DESC, "createdAt");
+
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+
+        String companyId = securityUtils.getCurrentUser().getId();
+
+        Page<Job> jobList = jobRepository.findJobsByFilters(
+                "COMPANY",
+                companyId,
+                null,
+                query.getJobType(),
+                query.getJobStatus(),
+                query.getJobLevel(),
+                query.getJobCountry(),
+                query.getJobCategory(),
+                query.getSearch(),
+                pageRequest);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", jobList.getContent());
+        response.put("total", jobList.getTotalElements());
+
+        return response;
+    }
 }
