@@ -3,6 +3,7 @@ package com.backend.jobland.dto;
 import com.backend.jobland.lib.enums.CategoryType;
 import com.backend.jobland.lib.enums.Country;
 import com.backend.jobland.lib.enums.JobLevel;
+import com.backend.jobland.lib.enums.JobStatus;
 import com.backend.jobland.lib.enums.JobType;
 
 import jakarta.validation.constraints.NotBlank;
@@ -54,6 +55,25 @@ public class CompanyDto {
 
         @NotNull()
         private CategoryType jobCategory;
+    }
+
+    @Data
+    public static class JobUpdate {
+        private String jobTitle;
+        private String jobDesc;
+        private JobType jobType;
+        private String jobRequirement;
+        private String jobExpertise;
+        private Country jobCountry;
+        private String jobCity;
+        private String jobAddress;
+        private String jobSalary;
+        private JobLevel jobLevel;
+        private String jobExperience;
+        private Double jobHourRate;
+        private String jobDeadline;
+        private CategoryType jobCategory;
+        private JobStatus jobStatus;
     }
 
 }
