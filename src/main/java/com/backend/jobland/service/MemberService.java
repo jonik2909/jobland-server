@@ -112,6 +112,11 @@ public class MemberService {
         memberRepository.incrementMemberViews(memberId);
     }
 
+    @Transactional
+    public void updateActiveJobsCount(String memberId, int amount) {
+        memberRepository.updateActiveJobsCount(memberId, amount);
+    }
+
     public Map<String, Object> getMembers(MemberDto.MembersInquiry query) {
         int page = query.getPage();
         int limit = query.getLimit();

@@ -10,5 +10,6 @@ public class AppErrors {
     public static final String USER_BLOCKED = "You are blocked or inactive!";
     public static final String UNAUTHENTICATED = "You are not authenticated, please login first!";
     public static final String ACCESS_DENIED = "Allowed only for authenticated users with correct role!";
+    public static final String CREATE_FAILED = "Create failed, please try again!";
 
 }
