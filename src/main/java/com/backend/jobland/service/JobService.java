@@ -208,4 +208,23 @@ public class JobService {
         return response;
     }
 
+    @Transactional
+    public Job updateJobByAdmin(String jobId, AdminDto.AdminJobUpdate data) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        JobStatus oldStatus = job.getJobStatus();
+        AppUtils.copyNonNulls(data, job);
+        JobStatus newStatus = job.getJobStatus();
+
+        if (oldStatus != newStatus) {
+            if (newStatus == JobStatus.ACTIVE) {
+                memberService.updateActiveJobsCount(job.getCompanyId(), 1);
+            } else if (oldStatus == JobStatus.ACTIVE) {
+                memberService.updateActiveJobsCount(job.getCompanyId(), -1);
+            }
+        }
+        return jobRepository.save(job);
+    }
+
 }

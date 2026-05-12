@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.jobland.dto.AdminDto;
+import com.backend.jobland.entity.Job;
 import com.backend.jobland.entity.Member;
 import com.backend.jobland.service.JobService;
 import com.backend.jobland.service.MemberService;
@@ -44,6 +45,14 @@ public class AdminController {
     @GetMapping("/job/list")
     public ResponseEntity<Object> getJobsByAdmin(@Valid AdminDto.AdminJobsInquiry query) {
         Map<String, Object> result = jobService.getJobsByAdmin(query);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/job/update/{id}")
+    public ResponseEntity<Job> updateJobByAdmin(
+            @PathVariable("id") String id,
+            @Valid @RequestBody AdminDto.AdminJobUpdate data) {
+        Job result = jobService.updateJobByAdmin(id, data);
         return ResponseEntity.ok(result);
     }
 }

@@ -75,4 +75,10 @@ public class AdminDto {
 
     }
 
+    @Data
+    public static class AdminJobUpdate {
+        @NotNull()
+        private JobStatus jobStatus;
+    }
+
 }
