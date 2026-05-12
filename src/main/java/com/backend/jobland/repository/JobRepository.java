@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,10 @@ import com.backend.jobland.lib.enums.JobType;
 @Repository
 public interface JobRepository extends JpaRepository<Job, String> {
     Optional<Job> findByIdAndCompanyId(String id, String companyId);
+
+    @Modifying
+    @Query("UPDATE Job j SET j.jobViews = j.jobViews + 1 WHERE j.id = :id")
+    void incrementJobViews(@Param("id") String id);
 
     @Query("SELECT j FROM Job j WHERE " +
             "( " +

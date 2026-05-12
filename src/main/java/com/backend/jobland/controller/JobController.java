@@ -4,10 +4,12 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.jobland.dto.JobDto;
+import com.backend.jobland.entity.Job;
 import com.backend.jobland.service.JobService;
 
 import jakarta.validation.Valid;
@@ -22,6 +24,12 @@ public class JobController {
     @GetMapping("/list")
     public ResponseEntity<Object> getJobs(@Valid JobDto.JobsInquiry query) {
         Map<String, Object> result = jobService.getJobs(query);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Job> getJob(@PathVariable String id) {
+        Job result = jobService.getJob(id);
         return ResponseEntity.ok(result);
     }
 }

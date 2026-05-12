@@ -14,10 +14,12 @@ import com.backend.jobland.repository.ViewRepository;
 public class ViewService {
     private final ViewRepository viewRepository;
     private final MemberService memberService;
+    private final JobService jobService;
 
-    public ViewService(ViewRepository viewRepository, @Lazy MemberService memberService) {
+    public ViewService(ViewRepository viewRepository, @Lazy MemberService memberService, @Lazy JobService jobService) {
         this.viewRepository = viewRepository;
         this.memberService = memberService;
+        this.jobService = jobService;
     }
 
     @Transactional
@@ -33,6 +35,10 @@ public class ViewService {
             switch (viewGroup) {
                 case ViewGroup.MEMBER:
                     memberService.updateMemberViews(viewRefId); // DB DATA UPDATE
+                    break;
+
+                case ViewGroup.JOB:
+                    jobService.updateJobViews(viewRefId); // DB DATA UPDATE
                     break;
 
                 default:

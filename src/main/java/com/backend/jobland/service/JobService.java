@@ -18,6 +18,7 @@ import com.backend.jobland.lib.AppErrors;
 import com.backend.jobland.lib.AppUtils;
 import com.backend.jobland.lib.enums.JobSort;
 import com.backend.jobland.lib.enums.JobStatus;
+import com.backend.jobland.lib.enums.ViewGroup;
 import com.backend.jobland.repository.JobRepository;
 import com.backend.jobland.security.SecurityUtils;
 
@@ -30,6 +31,7 @@ public class JobService {
     private final SecurityUtils securityUtils;
     private final JobRepository jobRepository;
     private final MemberService memberService;
+    private final ViewService viewService;
 
     public Map<String, Object> getJobs(JobDto.JobsInquiry query) {
         int page = query.getPage();
@@ -59,6 +61,30 @@ public class JobService {
         response.put("total", jobList.getTotalElements());
 
         return response;
+    }
+
+    public Job getJob(String jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        if (job.getJobStatus() != JobStatus.ACTIVE) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND);
+        }
+
+        if (securityUtils.isLoggedIn()) {
+            String memberId = securityUtils.getCurrentUser().getId();
+            boolean wasRecorded = viewService.recordView(memberId, jobId, ViewGroup.JOB);
+            if (wasRecorded) {
+                job.setJobViews(job.getJobViews() + 1);
+            }
+        }
+
+        return job;
+    }
+
+    @Transactional
+    public void updateJobViews(String jobId) {
+        jobRepository.incrementJobViews(jobId);
     }
 
     /** COMPANY **/
