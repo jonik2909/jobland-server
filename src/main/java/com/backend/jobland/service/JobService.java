@@ -77,6 +77,8 @@ public class JobService {
             if (wasRecorded) {
                 job.setJobViews(job.getJobViews() + 1);
             }
+
+            // TODO: meApplied
         }
 
         return job;
