@@ -1,14 +1,22 @@
 package com.backend.jobland.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.backend.jobland.dto.CompanyDto;
+import com.backend.jobland.dto.JobDto;
 import com.backend.jobland.entity.Job;
 import com.backend.jobland.lib.AppErrors;
 import com.backend.jobland.lib.AppUtils;
+import com.backend.jobland.lib.enums.JobSort;
 import com.backend.jobland.lib.enums.JobStatus;
 import com.backend.jobland.repository.JobRepository;
 import com.backend.jobland.security.SecurityUtils;
@@ -23,6 +31,37 @@ public class JobService {
     private final JobRepository jobRepository;
     private final MemberService memberService;
 
+    public Map<String, Object> getJobs(JobDto.JobsInquiry query) {
+        int page = query.getPage();
+        int limit = query.getLimit();
+
+        JobSort sortParam = query.getSort() != null ? query.getSort() : JobSort.createdAt;
+
+        Sort sort = JobSort.jobViews.equals(sortParam) ? Sort.by(Sort.Direction.DESC, "jobViews")
+                : Sort.by(Sort.Direction.DESC, "createdAt");
+
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+
+        Page<Job> jobList = jobRepository.findJobsByFilters(
+                "PUBLIC",
+                null,
+                query.getCompanyId(),
+                query.getJobType(),
+                null,
+                query.getJobLevel(),
+                query.getJobCountry(),
+                query.getJobCategory(),
+                query.getSearch(),
+                pageRequest);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", jobList.getContent());
+        response.put("total", jobList.getTotalElements());
+
+        return response;
+    }
+
+    /** COMPANY **/
     @Transactional
     public Job createJob(CompanyDto.JobCreate data) {
         try {
