@@ -47,4 +47,10 @@ public class CompanyControler {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/job/{id}")
+    public ResponseEntity<Job> getMyJob(@PathVariable String id) {
+        Job result = jobService.getMyJob(id);
+        return ResponseEntity.ok(result);
+    }
+
 }

@@ -165,4 +165,14 @@ public class JobService {
 
         return response;
     }
+
+    public Job getMyJob(String jobId) {
+        String memberId = securityUtils.getCurrentUser().getId();
+        Job job = jobRepository.findByIdAndCompanyId(jobId, memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        // TODO: applied Count
+
+        return job;
+    }
 }
