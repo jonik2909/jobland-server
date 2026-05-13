@@ -3,6 +3,7 @@ package com.backend.jobland.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,15 @@ public class BackgroundController {
     }
 
     // updateBackground
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Background> updateBackground(
+            @PathVariable("id") String id,
+            @Valid @RequestBody BackgroundDto.BackgroundUpdate body) {
+        Background result = backgroundService.updateBackground(id, body);
+        return ResponseEntity.ok(result);
+    }
+
     // getMyBackgrounds
     // deleteBackground
 }

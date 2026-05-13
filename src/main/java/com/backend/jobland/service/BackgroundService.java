@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.backend.jobland.dto.BackgroundDto;
 import com.backend.jobland.entity.Background;
 import com.backend.jobland.lib.AppErrors;
+import com.backend.jobland.lib.AppUtils;
 import com.backend.jobland.repository.BackgroundRepository;
 import com.backend.jobland.security.SecurityUtils;
 
@@ -34,5 +35,17 @@ public class BackgroundService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AppErrors.CREATE_FAILED);
         }
+    }
+
+    public Background updateBackground(String id, BackgroundDto.BackgroundUpdate data) {
+        System.out.println(data);
+        String memberId = securityUtils.getCurrentUser().getId();
+
+        Background back = backgroundRepository.findByIdAndMemberId(id, memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        AppUtils.copyNonNulls(data, back);
+
+        return backgroundRepository.save(back);
     }
 }
