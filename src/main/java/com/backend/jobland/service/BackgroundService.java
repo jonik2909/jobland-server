@@ -1,5 +1,7 @@
 package com.backend.jobland.service;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,7 +40,6 @@ public class BackgroundService {
     }
 
     public Background updateBackground(String id, BackgroundDto.BackgroundUpdate data) {
-        System.out.println(data);
         String memberId = securityUtils.getCurrentUser().getId();
 
         Background back = backgroundRepository.findByIdAndMemberId(id, memberId)
@@ -47,5 +48,16 @@ public class BackgroundService {
         AppUtils.copyNonNulls(data, back);
 
         return backgroundRepository.save(back);
+    }
+
+    public Map<String, Boolean> deleteBackground(String id) {
+        String memberId = securityUtils.getCurrentUser().getId();
+
+        Background back = backgroundRepository.findByIdAndMemberId(id, memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        backgroundRepository.delete(back);
+
+        return Map.of("success", true);
     }
 }

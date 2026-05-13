@@ -29,7 +29,6 @@ public class BackgroundController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    // updateBackground
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/update/{id}")
     public ResponseEntity<Background> updateBackground(
@@ -40,5 +39,13 @@ public class BackgroundController {
     }
 
     // getMyBackgrounds
+
     // deleteBackground
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<Object> deleteBackground(
+            @PathVariable("id") String id) {
+        Object result = backgroundService.deleteBackground(id);
+        return ResponseEntity.ok(result);
+    }
 }
