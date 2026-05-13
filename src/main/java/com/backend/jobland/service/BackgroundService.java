@@ -1,5 +1,6 @@
 package com.backend.jobland.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,13 @@ public class BackgroundService {
         AppUtils.copyNonNulls(data, back);
 
         return backgroundRepository.save(back);
+    }
+
+    public List<Background> getMyBackgrounds() {
+        String memberId = securityUtils.getCurrentUser().getId();
+
+        return backgroundRepository.findBackgroundsByMemberId(memberId);
+
     }
 
     public Map<String, Boolean> deleteBackground(String id) {
