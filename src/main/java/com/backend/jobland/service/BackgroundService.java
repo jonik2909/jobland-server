@@ -68,4 +68,8 @@ public class BackgroundService {
 
         return Map.of("success", true);
     }
+
+    public List<Background> getMemberBackgrounds(String memberId) {
+        return backgroundRepository.findBackgroundsByMemberId(memberId);
+    }
 }

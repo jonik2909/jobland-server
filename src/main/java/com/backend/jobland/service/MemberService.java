@@ -1,6 +1,7 @@
 package com.backend.jobland.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.backend.jobland.dto.AdminDto;
 import com.backend.jobland.dto.MemberDto;
+import com.backend.jobland.entity.Background;
 import com.backend.jobland.entity.Member;
 import com.backend.jobland.lib.AppErrors;
 import com.backend.jobland.lib.AppUtils;
@@ -33,6 +35,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtils securityUtils;
     private final ViewService viewService;
+    private final BackgroundService backgroundService;
 
     public Member signup(MemberDto.Signup data) {
         if (data.getMemberType() == MemberType.ADMIN) {
@@ -102,7 +105,10 @@ public class MemberService {
             }
         }
 
-        // TODO: CANDIDATE BACKGROUND
+        if (targetMember.getMemberType() == MemberType.CANDIDATE) {
+            List<Background> background = backgroundService.getMemberBackgrounds(targetId);
+            targetMember.setMembeBackgrounds(background);
+        }
 
         return targetMember;
     }
