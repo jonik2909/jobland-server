@@ -8,6 +8,7 @@ import com.backend.jobland.dto.ApplicationDto;
 import com.backend.jobland.entity.Application;
 import com.backend.jobland.entity.Job;
 import com.backend.jobland.lib.AppErrors;
+import com.backend.jobland.lib.enums.ApplicationStatus;
 import com.backend.jobland.repository.ApplicationRepository;
 import com.backend.jobland.security.SecurityUtils;
 
@@ -44,5 +45,19 @@ public class ApplicationService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AppErrors.CREATE_FAILED);
         }
+    }
+
+    @Transactional
+    public void deleteApplication(String id) {
+        String candidateId = securityUtils.getCurrentUser().getId();
+        Application app = applicationRepository.findByIdAndCandidateId(id, candidateId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        if (app.getApplicationStatus() != ApplicationStatus.SUBMITTED
+                && app.getApplicationStatus() != ApplicationStatus.VIEWED) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, AppErrors.CANNOT_DELETE_APPLICATION);
+        }
+
+        applicationRepository.delete(app);
     }
 }

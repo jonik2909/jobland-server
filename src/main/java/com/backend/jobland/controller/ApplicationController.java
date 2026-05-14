@@ -1,8 +1,11 @@
 package com.backend.jobland.controller;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,12 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    // deleteApplication
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<Object> deleteApplication(@PathVariable("id") String id) {
+        applicationService.deleteApplication(id);
+        return ResponseEntity.ok(Map.of("success", true));
+    }
+
     // getMyApplication
 }

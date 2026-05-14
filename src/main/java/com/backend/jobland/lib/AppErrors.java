@@ -12,4 +12,5 @@ public class AppErrors {
     public static final String ACCESS_DENIED = "Allowed only for authenticated users with correct role!";
     public static final String CREATE_FAILED = "Create failed, please try again!";
     public static final String ALREADY_APPLIED = "You have already applied for this job!";
+    public static final String CANNOT_DELETE_APPLICATION = "You can only delete applications that are in SUBMITTED or VIEWED status!";
 }
