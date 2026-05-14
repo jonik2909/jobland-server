@@ -90,6 +90,11 @@ public class JobService {
         jobRepository.incrementJobViews(jobId);
     }
 
+    public Job findJobById(String jobId) {
+        return jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+    }
+
     /** COMPANY **/
     @Transactional
     public Job createJob(CompanyDto.JobCreate data) {

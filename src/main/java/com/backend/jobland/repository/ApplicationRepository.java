@@ -7,5 +7,5 @@ import com.backend.jobland.entity.Application;
 
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, String> {
-
+    boolean existsByCandidateIdAndJobId(String candidateId, String jobId);
 }
