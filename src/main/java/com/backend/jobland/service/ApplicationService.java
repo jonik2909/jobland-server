@@ -96,6 +96,10 @@ public class ApplicationService {
         return applicationRepository.findByCandidateIdAndJobId(candidateId, jobId);
     }
 
+    public long countByJobId(String jobId) {
+        return applicationRepository.countByJobId(jobId);
+    }
+
     /** COMPANY **/
     public Map<String, Object> getCompanyApplications(CompanyApplicationsInquiry query) {
         String companyId = securityUtils.getCurrentUser().getId();

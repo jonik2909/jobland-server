@@ -104,7 +104,8 @@ public class Job {
     @JoinColumn(name = "companyId", insertable = false, updatable = false)
     private Member company;
 
-    // appliedCount
+    @Transient
+    private Long appliedCount;
 
     @Transient
     @JsonIgnoreProperties({ "company", "candidate", "job" })

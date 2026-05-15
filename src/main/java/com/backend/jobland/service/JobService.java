@@ -178,6 +178,10 @@ public class JobService {
                 query.getSearch(),
                 pageRequest);
 
+        jobList.getContent().forEach(item -> {
+            item.setAppliedCount(applicationService.countByJobId(item.getId()));
+        });
+
         Map<String, Object> response = new HashMap<>();
         response.put("list", jobList.getContent());
         response.put("total", jobList.getTotalElements());
@@ -189,8 +193,6 @@ public class JobService {
         String memberId = securityUtils.getCurrentUser().getId();
         Job job = jobRepository.findByIdAndCompanyId(jobId, memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
-
-        // TODO: applied Count
 
         return job;
     }
@@ -218,6 +220,10 @@ public class JobService {
                 query.getJobCategory(),
                 query.getSearch(),
                 pageRequest);
+
+        jobList.getContent().forEach(item -> {
+            item.setAppliedCount(applicationService.countByJobId(item.getId()));
+        });
 
         Map<String, Object> response = new HashMap<>();
         response.put("list", jobList.getContent());
