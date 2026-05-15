@@ -8,7 +8,6 @@ import com.backend.jobland.lib.enums.JobSort;
 import com.backend.jobland.lib.enums.JobStatus;
 import com.backend.jobland.lib.enums.JobType;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -120,6 +119,12 @@ public class CompanyDto {
         @NotBlank()
         private String jobId;
 
+        private ApplicationStatus applicationStatus;
+    }
+
+    @Data
+    public static class CompanyApplicationUpdateStatus {
+        @NotNull()
         private ApplicationStatus applicationStatus;
     }
 

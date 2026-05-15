@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.backend.jobland.dto.ApplicationDto;
+import com.backend.jobland.dto.CompanyDto.CompanyApplicationUpdateStatus;
 import com.backend.jobland.dto.CompanyDto.CompanyApplicationsInquiry;
 import com.backend.jobland.entity.Application;
 import com.backend.jobland.entity.Job;
@@ -118,5 +119,15 @@ public class ApplicationService {
         response.put("total", applicationPage.getTotalElements());
         response.put("stats", stats);
         return response;
+    }
+
+    @Transactional
+    public Application updateApplicationStatus(String id, CompanyApplicationUpdateStatus data) {
+        String companyId = securityUtils.getCurrentUser().getId();
+        Application app = applicationRepository.findByIdAndCompanyId(id, companyId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, AppErrors.DATA_NOT_FOUND));
+
+        app.setApplicationStatus(data.getApplicationStatus());
+        return applicationRepository.save(app);
     }
 }

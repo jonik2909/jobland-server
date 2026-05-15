@@ -61,6 +61,12 @@ public class CompanyControler {
         return ResponseEntity.ok(result);
     }
 
-    // updateApplicationStatus
+    @PostMapping("/application/update-status/{id}")
+    public ResponseEntity<Object> updateApplicationStatus(
+            @PathVariable("id") String id,
+            @Valid @RequestBody CompanyDto.CompanyApplicationUpdateStatus data) {
+        Object result = applicationService.updateApplicationStatus(id, data);
+        return ResponseEntity.ok(result);
+    }
 
 }
