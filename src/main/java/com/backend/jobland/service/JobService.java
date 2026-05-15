@@ -3,6 +3,7 @@ package com.backend.jobland.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,16 +24,26 @@ import com.backend.jobland.lib.enums.ViewGroup;
 import com.backend.jobland.repository.JobRepository;
 import com.backend.jobland.security.SecurityUtils;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class JobService {
 
     private final SecurityUtils securityUtils;
     private final JobRepository jobRepository;
     private final MemberService memberService;
     private final ViewService viewService;
+    private final ApplicationService applicationService;
+
+    public JobService(SecurityUtils securityUtils,
+            JobRepository jobRepository,
+            MemberService memberService,
+            ViewService viewService,
+            @Lazy ApplicationService applicationService) {
+        this.securityUtils = securityUtils;
+        this.jobRepository = jobRepository;
+        this.memberService = memberService;
+        this.viewService = viewService;
+        this.applicationService = applicationService;
+    }
 
     public Map<String, Object> getJobs(JobDto.JobsInquiry query) {
         int page = query.getPage();
@@ -79,7 +90,9 @@ public class JobService {
                 job.setJobViews(job.getJobViews() + 1);
             }
 
-            // TODO: meApplied
+            applicationService.findByCandidateIdAndJobId(memberId, jobId).ifPresent(app -> {
+                job.setMeApplied(app);
+            });
         }
 
         return job;

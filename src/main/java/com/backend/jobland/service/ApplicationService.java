@@ -2,6 +2,7 @@ package com.backend.jobland.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -89,6 +90,10 @@ public class ApplicationService {
         response.put("list", applicationPage.getContent());
         response.put("total", applicationPage.getTotalElements());
         return response;
+    }
+
+    public Optional<Application> findByCandidateIdAndJobId(String candidateId, String jobId) {
+        return applicationRepository.findByCandidateIdAndJobId(candidateId, jobId);
     }
 
     /** COMPANY **/
