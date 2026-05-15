@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,5 +38,11 @@ public class ApplicationController {
         return ResponseEntity.ok(Map.of("success", true));
     }
 
-    // getMyApplication
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/my")
+    public ResponseEntity<Object> getMyApplications(
+            @Valid ApplicationDto.ApplicationsInquiry query) {
+        Object result = applicationService.getMyApplications(query);
+        return ResponseEntity.ok(result);
+    }
 }

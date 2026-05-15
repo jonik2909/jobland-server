@@ -1,5 +1,11 @@
 package com.backend.jobland.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -59,5 +65,27 @@ public class ApplicationService {
         }
 
         applicationRepository.delete(app);
+    }
+
+    public Map<String, Object> getMyApplications(ApplicationDto.ApplicationsInquiry query) {
+        String candidateId = securityUtils.getCurrentUser().getId();
+
+        int page = query.getPage();
+        int limit = query.getLimit();
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+
+        ApplicationStatus status = query.getApplicationStatus();
+
+        Page<Application> applicationPage = applicationRepository.findApplicationsByFilters(
+                candidateId,
+                status,
+                pageRequest);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", applicationPage.getContent());
+        response.put("total", applicationPage.getTotalElements());
+        return response;
     }
 }
