@@ -10,6 +10,7 @@ import com.backend.jobland.lib.enums.Country;
 import com.backend.jobland.lib.enums.JobLevel;
 import com.backend.jobland.lib.enums.JobStatus;
 import com.backend.jobland.lib.enums.JobType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +31,7 @@ import lombok.Setter;
 @Entity
 @DynamicInsert
 @Table(name = "Jobs")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Job {
 
     @Id

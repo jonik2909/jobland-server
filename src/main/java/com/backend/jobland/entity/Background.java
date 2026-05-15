@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.backend.jobland.lib.enums.BackgroundType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "Backgrounds")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Background {
 
     @Id

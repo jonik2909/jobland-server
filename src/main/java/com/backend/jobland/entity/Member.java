@@ -12,6 +12,7 @@ import com.backend.jobland.lib.enums.MemberFeatured;
 import com.backend.jobland.lib.enums.MemberStatus;
 import com.backend.jobland.lib.enums.MemberType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Entity
 @DynamicInsert
 @Table(name = "Members")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Member {
 
     @Id

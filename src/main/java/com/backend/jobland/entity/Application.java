@@ -8,12 +8,14 @@ import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 import com.backend.jobland.lib.enums.ApplicationStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "Applications")
 @DynamicInsert
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Application {
 
     @Id

@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.backend.jobland.lib.enums.ViewGroup;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Entity
 @DynamicInsert
 @Table(name = "Views")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class View {
 
     @Id
