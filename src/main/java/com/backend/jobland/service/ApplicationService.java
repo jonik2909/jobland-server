@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.backend.jobland.dto.ApplicationDto;
+import com.backend.jobland.dto.CompanyDto.CompanyApplicationsInquiry;
 import com.backend.jobland.entity.Application;
 import com.backend.jobland.entity.Job;
 import com.backend.jobland.lib.AppErrors;
@@ -86,6 +87,36 @@ public class ApplicationService {
         Map<String, Object> response = new HashMap<>();
         response.put("list", applicationPage.getContent());
         response.put("total", applicationPage.getTotalElements());
+        return response;
+    }
+
+    /** COMPANY **/
+    public Map<String, Object> getCompanyApplications(CompanyApplicationsInquiry query) {
+        String companyId = securityUtils.getCurrentUser().getId();
+
+        int page = query.getPage();
+        int limit = query.getLimit();
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+
+        String jobId = query.getJobId();
+        ApplicationStatus status = query.getApplicationStatus();
+
+        Page<Application> applicationPage = applicationRepository.findCompanyApplications(companyId, jobId, status,
+                pageRequest);
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("applied", applicationRepository.countByJobId(jobId));
+        stats.put("approved",
+                applicationRepository.countByJobIdAndApplicationStatus(jobId, ApplicationStatus.APPROVED));
+        stats.put("rejected",
+                applicationRepository.countByJobIdAndApplicationStatus(jobId, ApplicationStatus.REJECTED));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", applicationPage.getContent());
+        response.put("total", applicationPage.getTotalElements());
+        response.put("stats", stats);
         return response;
     }
 }

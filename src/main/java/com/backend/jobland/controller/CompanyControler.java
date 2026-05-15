@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.jobland.dto.CompanyDto;
 import com.backend.jobland.entity.Job;
+import com.backend.jobland.service.ApplicationService;
 import com.backend.jobland.service.JobService;
 
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class CompanyControler {
 
     private final JobService jobService;
+    private final ApplicationService applicationService;
 
     @PostMapping("/job/create")
     public ResponseEntity<Object> createJob(@Valid @RequestBody CompanyDto.JobCreate body) {
@@ -52,5 +54,13 @@ public class CompanyControler {
         Job result = jobService.getMyJob(id);
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/applications/list")
+    public ResponseEntity<Object> getCompanyApplications(@Valid CompanyDto.CompanyApplicationsInquiry query) {
+        Object result = applicationService.getCompanyApplications(query);
+        return ResponseEntity.ok(result);
+    }
+
+    // updateApplicationStatus
 
 }
