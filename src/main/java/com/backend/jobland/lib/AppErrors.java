@@ -13,4 +13,7 @@ public class AppErrors {
     public static final String CREATE_FAILED = "Create failed, please try again!";
     public static final String ALREADY_APPLIED = "You have already applied for this job!";
     public static final String CANNOT_DELETE_APPLICATION = "You can only delete applications that are in SUBMITTED or VIEWED status!";
+    public static final String FILE_IS_EMPTY = "File is empty!";
+    public static final String ONLY_IMAGES_ALLOWED = "Only images are allowed (jpeg, jpg, png, webp, svg)!";
+    public static final String INVALID_TARGET_DIRECTORY = "Invalid target directory!";
 }
