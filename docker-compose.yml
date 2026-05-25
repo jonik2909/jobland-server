@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    image: jobland-server-image
+    container_name: jobland-server
+    ports:
+      - "${PORT:-8080}:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+
+# localhost:3003    => docker-host:8080
